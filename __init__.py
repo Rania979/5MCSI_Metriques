@@ -36,5 +36,40 @@ def mongraphique():
 def histogramme():
     return render_template("histogramme.html")
 
+@app.route('/commits')
+def commit():
+        response = urlopen('https://api.github.com/repos/Rania979/5MCSI_Metriques/commits')
+        raw_content = response.read()
+        json_content = json.loads(raw_content.decode('utf-8'))
+        results = []
+  
+        for list_element in json_content:
+          commit = list_element.get('commit').get('message')
+          author = list_element.get('commit').get('author').get('name')
+          date_commit = list_element.get('commit').get('author').get('date')
+          results.append({'commit': commit, 'author': author, 'date_commit': date_commit})
+  
+        return jsonify(results=results)
+  
+@app.route('/commits/<date_string>')
+def commit_date(date_string):
+    date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    minutes = date_object.minute
+    response = urlopen('https://api.github.com/repos/Rania979/5MCSI_Metriques/commits')
+    raw_content = response.read()
+    json_content = json.loads(raw_content.decode('utf-8'))
+    
+    filtered_commits = []
+    for commit_info in json_content:
+        commit_date = datetime.strptime(commit_info.get('commit').get('author').get('date'), '%Y-%m-%dT%H:%M:%SZ')
+        if commit_date.minute == minutes:
+            commit = commit_info.get('commit').get('message')
+            author = commit_info.get('commit').get('author').get('name')
+            date_commit = commit_info.get('commit').get('author').get('date')
+            filtered_commits.append({'commit': commit, 'author': author, 'date_commit': date_commit})
+
+    return jsonify(results=filtered_commits)
+
+
 if __name__ == "__main__":
   app.run(debug=True)
