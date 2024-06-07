@@ -33,7 +33,7 @@
            var tableau = [['Jour', 'Température']];
 
            for(var i=0;i<resultat.length;i++){
-             tableau.push([new Date(resultat[i].Jour * 1000).toDateString(), resultat[i].temp]);
+             tableau.push([new Date(resultat[i].Jour * 1000).toString(), resultat[i].temp]);
            }
            
            var data = google.visualization.arrayToDataTable(tableau);
