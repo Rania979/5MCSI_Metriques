@@ -33,13 +33,13 @@
            var tableau = [['Jour', 'Température']];
 
            for(var i=0;i<resultat.length;i++){
-             tableau.push([resultat[i].Jour, resultat[i].temp]);
+             tableau.push([new Date(resultat[i].Jour), resultat[i].temp]);
            }
            
            var data = google.visualization.arrayToDataTable(tableau);
 
             var options = {
-            title: 'Lengths of dinosaurs, in meters',
+            title: 'Histogramme',
             legend: { position: 'none' },
             };
 
