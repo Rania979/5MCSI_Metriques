@@ -36,11 +36,11 @@ def mongraphique():
 def histogramme():
     return render_template("histogramme.html")
 
-@app.route('/commits-histogramme')
+@app.route('/commits')
 def commitHistogramme():
     return render_template("commits.html")
 
-@app.route('/commits')
+@app.route('/commits-data')
 def commit():
         response = urlopen('https://api.github.com/repos/Rania979/5MCSI_Metriques/commits')
         raw_content = response.read()
@@ -55,7 +55,7 @@ def commit():
   
         return jsonify(results=results)
   
-@app.route('/commits/<date_string>')
+@app.route('/commits-data/<date_string>')
 def commit_date(date_string):
     date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
     minutes = date_object.minute
