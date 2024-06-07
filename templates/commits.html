@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commits per Minute</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        function loadJSON(path, success, error) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        if (success)
+                            success(JSON.parse(xhr.responseText));
+                    } else {
+                        if (error)
+                            error(xhr);
+                    }
+                }
+            };
+            xhr.open("GET", path, true);
+            xhr.send();
+        }
+
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            loadJSON('https://rania9772.alwaysdata.net/commits/',
+                function(data) {
+                    var commitsData = data.results; // Les données des commits
+                    var commitsPerMinute = {}; // Dictionnaire pour stocker le nombre de commits par minute
+
+                    // Parcours des données et comptage des commits par minute
+                    commitsData.forEach(commit => {
+                        var commitDate = new Date(commit.date_commit);
+                        var minute = commitDate.getMinutes();
+                        commitsPerMinute[minute] = (commitsPerMinute[minute] || 0) + 1;
+                    });
+
+                    // Création d'un tableau pour le graphique
+                    var tableau = [['Minute', 'Commits']];
+                    for (var minute in commitsPerMinute) {
+                        tableau.push([parseInt(minute), commitsPerMinute[minute]]);
+                    }
+
+                    var data = google.visualization.arrayToDataTable(tableau);
+
+                    var options = {
+                        title: 'Commits per Minute',
+                        legend: { position: 'none' },
+                        hAxis: { title: 'Minute' },
+                        vAxis: { title: 'Commits' }
+                    };
+
+                    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+
+                },
+                function(xhr) { console.error(xhr); }
+            );
+        }
+    </script>
+</head>
+<body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+</body>
+</html>
