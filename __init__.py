@@ -36,6 +36,10 @@ def mongraphique():
 def histogramme():
     return render_template("histogramme.html")
 
+@app.route('/commits-histogramme')
+def commit():
+    return render_template("commits.html")
+
 @app.route('/commits')
 def commit():
         response = urlopen('https://api.github.com/repos/Rania979/5MCSI_Metriques/commits')
