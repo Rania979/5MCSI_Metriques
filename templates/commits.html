@@ -28,7 +28,7 @@
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
 
-            loadJSON('https://rania9772.alwaysdata.net/commits',
+            loadJSON('https://rania9772.alwaysdata.net/commits-data',
                 function(data) {
                     var commitsData = data.results; // Les données des commits
                     var commitsPerMinute = {}; // Dictionnaire pour stocker le nombre de commits par minute
